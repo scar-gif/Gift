@@ -1,0 +1,265 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Special Gift</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    height:100vh;
+    background: radial-gradient(circle, #1b2735, #090a0f);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    overflow:hidden;
+}
+
+.cover{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(135deg,#141e30,#243b55);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    z-index:5;
+    cursor:pointer;
+}
+
+.cover h1{
+    font-size:clamp(26px,6vw,42px);
+}
+
+.cover p{
+    margin-top:10px;
+    opacity:0.8;
+}
+
+
+.gift{
+    text-align:center;
+    cursor:pointer;
+}
+
+.box{
+    position:relative;
+    width:180px;
+    height:140px;
+    margin:auto;
+}
+
+.box-body{
+    width:100%;
+    height:100%;
+    background:#e91e63;
+    border-radius:0 0 12px 12px;
+}
+
+.box-lid{
+    position:absolute;
+    top:-40px;
+    width:100%;
+    height:40px;
+    background:#ad1457;
+    border-radius:12px 12px 0 0;
+    transition:transform 1s ease;
+}
+
+.ribbon{
+    position:absolute;
+    width:20px;
+    height:100%;
+    background:#fff;
+    left:50%;
+    transform:translateX(-50%);
+}
+
+
+.surprise{
+    display:none;
+    text-align:center;
+    max-width:800px;
+    padding:20px;
+    animation:fadeIn 1.5s forwards;
+}
+
+.title{
+    font-size:26px;
+    margin-bottom:20px;
+}
+
+.name{
+    font-size:clamp(36px,8vw,60px);
+    font-weight:bold;
+    min-height:80px;
+    position:relative;
+    text-shadow:0 0 25px rgba(255,255,255,0.8);
+}
+
+.quote,.final{
+    margin-top:30px;
+    font-size:clamp(18px,4.5vw,26px);
+    opacity:0;
+    transition:opacity 1s;
+}
+
+
+.sparkle{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:white;
+    border-radius:50%;
+    opacity:0;
+    animation:sparkle 2s infinite;
+}
+
+@keyframes sparkle{
+    0%{opacity:0;transform:scale(0);}
+    50%{opacity:1;transform:scale(1);}
+    100%{opacity:0;transform:scale(0);}
+}
+
+@keyframes fadeIn{
+    from{opacity:0;transform:scale(0.9);}
+    to{opacity:1;transform:scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+
+<div class="cover" id="cover">
+    <h1>🎁 A Special Gift</h1>
+    <p>Tap to open</p>
+</div>
+
+<div class="gift" id="gift" style="display:none">
+    <div class="box">
+        <div class="box-lid" id="lid"></div>
+        <div class="box-body">
+            <div class="ribbon"></div>
+        </div>
+    </div>
+    <p style="margin-top:15px;opacity:.8;">Tap the gift 🎁</p>
+</div>
+
+
+<div class="surprise" id="surprise">
+    <div class="title">This is for you 💖</div>
+    <div class="name" id="typedName"></div>
+    <div class="quote" id="quoteBox"></div>
+    <div class="final" id="finalMsg"></div>
+</div>
+
+<script>
+const cover=document.getElementById("cover");
+const gift=document.getElementById("gift");
+
+cover.addEventListener("click",()=>{
+    cover.style.display="none";
+    gift.style.display="block";
+});
+
+
+const lid=document.getElementById("lid");
+const surprise=document.getElementById("surprise");
+
+gift.addEventListener("click",()=>{
+    lid.style.transform="rotate(-120deg) translateY(-20px)";
+    setTimeout(()=>{
+        gift.style.display="none";
+        surprise.style.display="block";
+        typeName();
+    },1200);
+});
+
+
+const nameText="✨GANDU BACCHU✨";
+const typedName=document.getElementById("typedName");
+let i=0;
+
+function typeName(){
+    if(i<nameText.length){
+        typedName.textContent+=nameText[i];
+        i++;
+        setTimeout(typeName,150);
+    }else{
+        sparkles();
+        showQuotes();
+    }
+}
+
+function sparkles(){
+    for(let i=0;i<30;i++){
+        const s=document.createElement("div");
+        s.className="sparkle";
+        s.style.left=Math.random()*100+"%";
+        s.style.top=Math.random()*100+"%";
+        s.style.animationDelay=Math.random()*2+"s";
+        typedName.appendChild(s);
+    }
+}
+
+
+const quotes=[
+"You are the best.",
+"You are stronger than you think.",
+"You matter more than you know.",
+"You are doing amazing.",
+"You are enough.",
+"Believe in yourself.",
+"You inspire others.",
+"Your dreams are valid.",
+"Keep going.",
+"You have a beautiful heart.",
+"You light up lives.",
+"You are capable.",
+"Never doubt your worth.",
+"You are growing.",
+"The world needs you.",
+"You are brave.",
+"Your efforts matter.",
+"You are becoming better.",
+"Stay proud of yourself."
+];
+
+let q=0;
+const quoteBox=document.getElementById("quoteBox");
+const finalMsg=document.getElementById("finalMsg");
+
+function showQuotes(){
+    if(q<quotes.length){
+        quoteBox.style.opacity=0;
+        setTimeout(()=>{
+            quoteBox.textContent=quotes[q];
+            quoteBox.style.opacity=1;
+            q++;
+        },800);
+    }else{
+        showFinal();
+        clearInterval(loop);
+    }
+}
+
+function showFinal(){
+    setTimeout(()=>{
+        finalMsg.textContent="💌 No matter what, always remember — you are truly special and you deserve all the happiness in the world.";
+        finalMsg.style.opacity=1;
+    },1500);
+}
+
+const loop=setInterval(showQuotes,3500);
+</script>
+
+</body>
+  </html>
